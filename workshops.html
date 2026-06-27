@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Workshops & Events — Elefant Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--sage:#2C5F2E;--sage-mid:#3E7B40;--sage-lt:#6DAB6F;--cream:#FAF8F3;--gold:#B8953A;--gold-lt:#D4B86A;--ink:#111614;--white:#FFFFFF;--text-muted:rgba(250,248,243,0.5);--border:rgba(255,255,255,0.08);--glass:rgba(255,255,255,0.04);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;cursor:none;overflow-x:hidden;line-height:1.6;}
+#cur-d{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid rgba(184,149,58,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .16s,height .16s,border-color .16s,background .16s;}
+#cur-r.h{width:54px;height:54px;border-color:var(--gold);background:rgba(184,149,58,.06);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:18px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;}
+nav.s{background:rgba(17,22,20,.97);backdrop-filter:blur(20px);padding:12px 60px;border-bottom:1px solid var(--border);}
+.nav-logo img{height:42px;object-fit:contain;filter:brightness(0) invert(1);display:block;}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(250,248,243,.55);text-decoration:none;transition:color .3s;font-weight:500;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-right{display:flex;gap:12px;align-items:center;}
+.nav-cta{background:var(--gold);color:var(--ink);padding:10px 22px;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;font-family:'DM Sans';}
+.nav-cta:hover{background:var(--gold-lt);transform:translateY(-1px);}
+.sec{padding:110px 60px;}
+.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:14px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(30px,3.8vw,50px);font-weight:700;line-height:1.1;margin-bottom:22px;}
+.sec-title em{font-style:italic;color:var(--sage-lt);font-weight:400;}
+.fi{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease;}
+.fi.v{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+.btn-g{background:var(--sage);color:var(--white);padding:14px 32px;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;display:inline-block;font-family:'DM Sans';}
+.btn-g:hover{background:var(--sage-mid);transform:translateY(-2px);}
+/* FOOTER */
+footer{background:#070d07;padding:64px 60px 32px;border-top:1px solid var(--border);}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:44px;}
+.ft-logo img{height:38px;margin-bottom:10px;display:block;filter:brightness(0) invert(1);}
+.ft-tag{font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700;}
+.ft-desc{font-size:12px;line-height:1.9;color:rgba(250,248,243,.3);max-width:220px;font-weight:300;}
+.ft-col h4{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:700;}
+.ft-col ul{list-style:none;}
+.ft-col ul li{margin-bottom:8px;}
+.ft-col ul li a{font-size:12px;color:rgba(250,248,243,.38);text-decoration:none;transition:color .3s;}
+.ft-col ul li a:hover{color:var(--cream);}
+.ft-bot{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.ft-copy{font-size:9px;color:rgba(250,248,243,.18);letter-spacing:.5px;}
+.hygiene{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);padding:7px 12px;border:1px solid rgba(184,149,58,.18);}
+.hygiene-n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#9be139;}
+.hygiene span{font-size:9px;color:var(--text-muted);letter-spacing:1px;}
+.socials{display:flex;gap:5px;}
+.soc{width:32px;height:32px;border:1px solid rgba(250,248,243,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);text-decoration:none;transition:all .3s;}
+.soc:hover{border-color:var(--gold);color:var(--gold);}
+@media(max-width:900px){nav,nav.s{padding:14px 24px;}.nav-links{display:none;}.sec{padding:72px 24px;}.ft-grid{grid-template-columns:1fr;gap:32px;}footer{padding:52px 24px 28px;}}
+</style>
+<style>
+.page-hero{padding:160px 60px 80px;background:linear-gradient(160deg,#091309 0%,#111614 100%);position:relative;overflow:hidden;}
+.page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(184,149,58,.08) 0%,transparent 50%);pointer-events:none;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(42px,7vw,80px);font-weight:900;line-height:.92;letter-spacing:-2px;position:relative;z-index:1;}
+.page-hero h1 em{font-style:italic;font-weight:400;display:block;background:linear-gradient(120deg,var(--sage-lt),var(--gold-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-hero p{font-size:15px;color:var(--text-muted);max-width:500px;margin-top:20px;font-weight:300;line-height:1.8;position:relative;z-index:1;}
+.ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:0;}
+.wc{background:#0d1610;padding:48px 40px;border:1px solid var(--border);transition:all .35s;position:relative;overflow:hidden;}
+.wc::before{content:'';position:absolute;inset:0;background:rgba(44,95,46,.09);opacity:0;transition:opacity .35s;}
+.wc:hover::before{opacity:1;}
+.wc:hover{border-color:rgba(44,95,46,.38);transform:translateY(-3px);}
+.wc-icon{font-size:32px;margin-bottom:20px;}
+.wc h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;margin-bottom:14px;}
+.wc p{font-size:13px;line-height:1.9;color:var(--text-muted);margin-bottom:24px;font-weight:300;}
+.wc ul{list-style:none;margin-bottom:28px;}
+.wc ul li{font-size:12px;color:var(--text-muted);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.wc ul li::before{content:'→';color:var(--gold);font-size:10px;}
+.wc a{display:inline-block;background:var(--sage);color:var(--white);padding:12px 26px;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;position:relative;z-index:1;}
+.wc a:hover{background:var(--sage-mid);}
+.fgf-section{background:#0a100a;}
+.fgf-inner{border:1px solid var(--border);padding:64px;position:relative;}
+.fgf-inner::before{content:'';position:absolute;top:0;left:0;width:120px;height:1px;background:var(--gold);}
+.fgf-inner::after{content:'';position:absolute;top:0;left:0;width:1px;height:120px;background:var(--gold);}
+.fgf-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:0;}
+.fgf-text p{font-size:14px;line-height:2;color:var(--text-muted);margin-bottom:14px;font-weight:300;}
+@media(max-width:900px){.ws-grid{grid-template-columns:1fr;}.fgf-grid{grid-template-columns:1fr;}.fgf-inner{padding:36px 22px;}.page-hero{padding:120px 24px 60px;}}
+</style>
+</head>
+<body>
+<div id="cur-d"></div><div id="cur-r"></div>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="assets/images/img_029.png" alt="Elefant Café"></a>
+  <ul class="nav-links">
+    <li><a href="index.html" >Home</a></li>
+    <li><a href="index.html#menu">Menu</a></li>
+    <li><a href="workshops.html" class='active'>Workshops</a></li>
+    <li><a href="index.html#hours">Visit</a></li>
+    <li><a href="blog.html" >Read</a></li>
+    <li><a href="index.html#reviews">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://wa.me/447768561470" target="_blank" class="nav-cta">Order Now</a>
+  </div>
+</nav>
+<div class="page-hero">
+  <span class="eyebrow">Workshops &amp; Events</span>
+  <h1>Cook, Learn,<br><em>Thrive</em></h1>
+  <p>Join us for hands-on plant-based cooking classes in Milton Keynes. Learn from our chefs, discover new techniques, and take the joy of good food home with you.</p>
+</div>
+
+<section class="sec" style="background:#0d1610;">
+  <div class="ws-grid">
+    <div class="wc fi">
+      <div class="wc-icon">🍽️</div>
+      <h3>Plant-Based Cooking Classes</h3>
+      <p>Hands-on sessions guided by our team. Learn to cook from scratch using whole, plant-based ingredients — from fermented Dosa to creamy Zen Wraps.</p>
+      <ul>
+        <li>Suitable for all skill levels</li>
+        <li>Small group sessions for personal attention</li>
+        <li>Take-home recipes and techniques</li>
+        <li>Tasting included — eat what you make</li>
+      </ul>
+      <a href="https://wa.me/447768561470?text=I'd%20like%20to%20book%20a%20cooking%20workshop" target="_blank">Book via WhatsApp</a>
+    </div>
+    <div class="wc fi d1">
+      <div class="wc-icon">📚</div>
+      <h3>Nutrition & Wellness Talks</h3>
+      <p>Educational sessions on the science behind plant-based eating — gut health, microbiome, cardiovascular wellness, and sustainable nutrition. Ideal for schools, corporates and community groups.</p>
+      <ul>
+        <li>Science-led, jargon-free presentations</li>
+        <li>Interactive Q&A included</li>
+        <li>Available in-person or remote</li>
+        <li>Tailored to your group's needs</li>
+      </ul>
+      <a href="mailto:elefantcafeuk@gmail.com">Enquire Now</a>
+    </div>
+    <div class="wc fi">
+      <div class="wc-icon">🎉</div>
+      <h3>Party & Catering Orders</h3>
+      <p>We take catering orders for all occasions — birthdays, office events, community gatherings, and celebrations. Entirely plant-based, beautifully presented.</p>
+      <ul>
+        <li>All occasions, any size</li>
+        <li>Custom menus available</li>
+        <li>Milton Keynes & surrounding areas</li>
+        <li>Competitive, transparent pricing</li>
+      </ul>
+      <a href="mailto:elefantcafeuk@gmail.com">Get a Quote</a>
+    </div>
+    <div class="wc fi d1">
+      <div class="wc-icon">🌿</div>
+      <h3>School & Community Programmes</h3>
+      <p>We partner with local schools and community organisations to deliver plant-based food education. Connecting children and families with healthy, affordable cooking.</p>
+      <ul>
+        <li>Curriculum-linked sessions available</li>
+        <li>Hands-on, child-friendly formats</li>
+        <li>Aligned with Elefant Café's ethos</li>
+        <li>Flexible scheduling</li>
+      </ul>
+      <a href="mailto:elefantcafeuk@gmail.com">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec fgf-section" id="feel-good-friday">
+  <div class="fgf-inner">
+    <div class="fgf-grid">
+      <div class="fi">
+        <span class="eyebrow">Every Friday</span>
+        <h2 class="sec-title">Feel Good<br><em>Friday Menu</em></h2>
+        <div class="fgf-text">
+          <p>Every Friday, we curate a special rotating menu of fresh, seasonal plant-based dishes — going beyond our regular menu to showcase something a little unexpected.</p>
+          <p>Think wholesome Friday bowls, seasonal specials, and feel-good combinations that make your weekend start right. Ask us on WhatsApp each week for that Friday's menu.</p>
+        </div>
+        <a href="https://wa.me/447768561470?text=What's%20the%20Feel%20Good%20Friday%20menu%20this%20week?" target="_blank" class="btn-g" style="margin-top:28px;display:inline-block;">Ask About This Friday</a>
+      </div>
+      <div class="fi d2" style="padding:40px;border:1px solid var(--border);text-align:center;">
+        <div style="font-size:48px;margin-bottom:20px;">🌿</div>
+        <p style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;line-height:1.6;color:var(--gold-lt);">"Indulge your weekend with wholesome Feel Good Friday menu from Elefant Café."</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:16px;letter-spacing:2px;text-transform:uppercase;">Every Friday · Limited availability</p>
+        <a href="https://www.instagram.com/elefant_cafe" target="_blank" style="display:inline-block;margin-top:22px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;font-weight:700;">Follow @elefant_cafe for previews →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo"><img src="assets/images/img_030.png" alt="Elefant Café"></div>
+      <div class="ft-tag">Healthily Ever After</div>
+      <p class="ft-desc">100% plant-based takeaway in Milton Keynes.</p>
+    </div>
+    <div class="ft-col"><h4>Navigate</h4><ul>
+      <li><a href="index.html">Home</a></li><li><a href="index.html#menu">Menu</a></li>
+      <li><a href="workshops.html">Workshops</a></li><li><a href="blog.html">Read</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Visit</h4><ul>
+      <li><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Capella House, MK6 1AP</a></li>
+      <li><a href="index.html#hours">Opening Hours</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Connect</h4><ul>
+      <li><a href="https://www.instagram.com/elefant_cafe" target="_blank">@elefant_cafe</a></li>
+      <li><a href="https://wa.me/447768561470" target="_blank">WhatsApp</a></li>
+      <li><a href="mailto:elefantcafeuk@gmail.com">Email Us</a></li>
+    </ul></div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Elefant Café Ltd · Milton Keynes</span>
+    <div class="hygiene"><span>FSA</span><span class="hygiene-n">5</span><span>★</span></div>
+    <div class="socials">
+      <a href="https://www.instagram.com/elefant_cafe" target="_blank" class="soc">IG</a>
+      <a href="https://wa.me/447768561470" target="_blank" class="soc">WA</a>
+      <a href="mailto:elefantcafeuk@gmail.com" class="soc">✉</a>
+    </div>
+  </div>
+</footer>
+<script>
+const cd=document.getElementById('cur-d'),cr=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){cd.style.left=mx+'px';cd.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>cr.classList.add('h'));el.addEventListener('mouseleave',()=>cr.classList.remove('h'));});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>60));
+const fis=document.querySelectorAll('.fi');
+const fObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v');}),{threshold:.08});
+fis.forEach(f=>fObs.observe(f));
+const wa=document.createElement('a');wa.href='https://wa.me/447768561470';wa.target='_blank';
+wa.style.cssText='position:fixed;bottom:24px;right:24px;z-index:300;width:50px;height:50px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;transition:transform .3s;';
+wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+wa.addEventListener('mouseenter',()=>{wa.style.transform='scale(1.1)';cr.classList.add('h');});
+wa.addEventListener('mouseleave',()=>{wa.style.transform='scale(1)';cr.classList.remove('h');});
+document.body.appendChild(wa);
+</script>
+</body>
+</html>

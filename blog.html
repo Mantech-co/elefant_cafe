@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Read & Learn — Elefant Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--sage:#2C5F2E;--sage-mid:#3E7B40;--sage-lt:#6DAB6F;--cream:#FAF8F3;--gold:#B8953A;--gold-lt:#D4B86A;--ink:#111614;--white:#FFFFFF;--text-muted:rgba(250,248,243,0.5);--border:rgba(255,255,255,0.08);--glass:rgba(255,255,255,0.04);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;cursor:none;overflow-x:hidden;line-height:1.6;}
+#cur-d{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid rgba(184,149,58,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .16s,height .16s,border-color .16s,background .16s;}
+#cur-r.h{width:54px;height:54px;border-color:var(--gold);background:rgba(184,149,58,.06);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:18px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;}
+nav.s{background:rgba(17,22,20,.97);backdrop-filter:blur(20px);padding:12px 60px;border-bottom:1px solid var(--border);}
+.nav-logo img{height:42px;object-fit:contain;filter:brightness(0) invert(1);display:block;}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(250,248,243,.55);text-decoration:none;transition:color .3s;font-weight:500;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-right{display:flex;gap:12px;align-items:center;}
+.nav-cta{background:var(--gold);color:var(--ink);padding:10px 22px;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;font-family:'DM Sans';}
+.nav-cta:hover{background:var(--gold-lt);transform:translateY(-1px);}
+.sec{padding:110px 60px;}
+.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:14px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(30px,3.8vw,50px);font-weight:700;line-height:1.1;margin-bottom:22px;}
+.sec-title em{font-style:italic;color:var(--sage-lt);font-weight:400;}
+.fi{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease;}
+.fi.v{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+.btn-g{background:var(--sage);color:var(--white);padding:14px 32px;font-size:10px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;display:inline-block;font-family:'DM Sans';}
+.btn-g:hover{background:var(--sage-mid);transform:translateY(-2px);}
+/* FOOTER */
+footer{background:#070d07;padding:64px 60px 32px;border-top:1px solid var(--border);}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:44px;}
+.ft-logo img{height:38px;margin-bottom:10px;display:block;filter:brightness(0) invert(1);}
+.ft-tag{font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700;}
+.ft-desc{font-size:12px;line-height:1.9;color:rgba(250,248,243,.3);max-width:220px;font-weight:300;}
+.ft-col h4{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:700;}
+.ft-col ul{list-style:none;}
+.ft-col ul li{margin-bottom:8px;}
+.ft-col ul li a{font-size:12px;color:rgba(250,248,243,.38);text-decoration:none;transition:color .3s;}
+.ft-col ul li a:hover{color:var(--cream);}
+.ft-bot{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.ft-copy{font-size:9px;color:rgba(250,248,243,.18);letter-spacing:.5px;}
+.hygiene{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);padding:7px 12px;border:1px solid rgba(184,149,58,.18);}
+.hygiene-n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#9be139;}
+.hygiene span{font-size:9px;color:var(--text-muted);letter-spacing:1px;}
+.socials{display:flex;gap:5px;}
+.soc{width:32px;height:32px;border:1px solid rgba(250,248,243,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);text-decoration:none;transition:all .3s;}
+.soc:hover{border-color:var(--gold);color:var(--gold);}
+@media(max-width:900px){nav,nav.s{padding:14px 24px;}.nav-links{display:none;}.sec{padding:72px 24px;}.ft-grid{grid-template-columns:1fr;gap:32px;}footer{padding:52px 24px 28px;}}
+</style>
+<style>
+.page-hero{padding:160px 60px 80px;background:linear-gradient(160deg,#091309 0%,#111614 100%);position:relative;overflow:hidden;}
+.page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 60%,rgba(44,95,46,.15) 0%,transparent 55%);pointer-events:none;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(42px,7vw,80px);font-weight:900;line-height:.92;letter-spacing:-2px;position:relative;z-index:1;}
+.page-hero h1 em{font-style:italic;font-weight:400;display:block;background:linear-gradient(120deg,var(--sage-lt),var(--gold-lt));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-hero p{font-size:15px;color:var(--text-muted);max-width:480px;margin-top:20px;font-weight:300;line-height:1.8;position:relative;z-index:1;}
+.blog-index{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.bc{background:#0d1610;overflow:hidden;transition:all .35s;display:flex;flex-direction:column;}
+.bc:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(0,0,0,.5);}
+.bc a{text-decoration:none;color:inherit;display:flex;flex-direction:column;flex:1;}
+.bc-img{width:100%;aspect-ratio:16/9;overflow:hidden;background:#091309;}
+.bc-img svg{width:100%;height:100%;display:block;}
+.bc-body{padding:26px 28px;flex:1;display:flex;flex-direction:column;}
+.bc-tag{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--sage-lt);margin-bottom:8px;font-weight:700;}
+.bc h3{font-family:'Playfair Display',serif;font-size:19px;font-weight:400;margin-bottom:10px;line-height:1.3;}
+.bc p{font-size:12px;line-height:1.8;color:var(--text-muted);flex:1;font-weight:300;}
+.bc-read{display:inline-block;margin-top:16px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;}
+.bc-read::after{content:' →';}
+.bc-coming{opacity:.42;pointer-events:none;}
+@media(max-width:900px){.blog-index{grid-template-columns:1fr;}.page-hero{padding:120px 24px 60px;}}
+</style>
+</head>
+<body>
+<div id="cur-d"></div><div id="cur-r"></div>
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="assets/images/img_002.png" alt="Elefant Café"></a>
+  <ul class="nav-links">
+    <li><a href="index.html" >Home</a></li>
+    <li><a href="index.html#menu">Menu</a></li>
+    <li><a href="workshops.html" >Workshops</a></li>
+    <li><a href="index.html#hours">Visit</a></li>
+    <li><a href="blog.html" class='active'>Read</a></li>
+    <li><a href="index.html#reviews">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://wa.me/447768561470" target="_blank" class="nav-cta">Order Now</a>
+  </div>
+</nav>
+<div class="page-hero">
+  <span class="eyebrow">Read &amp; Learn</span>
+  <h1>Food, science &<br><em>good living</em></h1>
+  <p>Thoughtful reads on plant-based nutrition, gut health, and the science of eating well — without the wellness-world noise.</p>
+</div>
+<section class="sec" style="background:#0a100a;">
+  <div class="blog-index">
+    <div class="bc fi">
+      <a href="blog-plant-based-science.html">
+        <div class="bc-img">
+          <svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="225" fill="#0a1409"/>
+            <circle cx="200" cy="112" r="70" fill="none" stroke="rgba(44,95,46,.3)" stroke-width="1"/>
+            <circle cx="200" cy="112" r="45" fill="rgba(44,95,46,.1)"/>
+            <path d="M200 42 L200 182" stroke="rgba(44,95,46,.4)" stroke-width="1"/>
+            <path d="M130 112 L270 112" stroke="rgba(44,95,46,.4)" stroke-width="1"/>
+            <path d="M149 62 L251 162" stroke="rgba(184,149,58,.2)" stroke-width="1"/>
+            <path d="M251 62 L149 162" stroke="rgba(184,149,58,.2)" stroke-width="1"/>
+            <circle cx="200" cy="112" r="6" fill="var(--gold)" opacity=".6"/>
+            <text x="200" y="208" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(184,149,58,.25)" letter-spacing="4">SCIENCE</text>
+          </svg>
+        </div>
+        <div class="bc-body">
+          <span class="bc-tag">Science & Nutrition</span>
+          <h3>Plant-Based Eating: What Modern Science Actually Says</h3>
+          <p>Researchers have moved well beyond ideology. The gut microbiome, cardiovascular research, legumes and fibre — here's what the evidence actually shows.</p>
+          <span class="bc-read">Read Article</span>
+        </div>
+      </a>
+    </div>
+    <div class="bc bc-coming fi d1">
+      <div class="bc-img"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#0d1a0d"/><rect x="100" y="60" width="200" height="105" rx="4" fill="rgba(44,95,46,.08)" stroke="rgba(44,95,46,.18)" stroke-width="1"/><text x="200" y="120" text-anchor="middle" font-family="serif" font-size="12" fill="rgba(250,248,243,.12)" letter-spacing="2">COMING SOON</text></svg></div>
+      <div class="bc-body"><span class="bc-tag">Gut Health</span><h3>The Fibre Revolution: Why Your Gut Bacteria Matter More Than You Think</h3><p>Short-chain fatty acids, the microbiome, and why feeding your gut bacteria may be as important as what you absorb yourself.</p><span class="bc-read">Coming Soon</span></div>
+    </div>
+    <div class="bc bc-coming fi d2">
+      <div class="bc-img"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#1a0d09"/><path d="M80 160 C130 100 180 130 200 90 C220 50 270 80 320 70" stroke="rgba(184,149,58,.4)" stroke-width="2" fill="none"/><text x="200" y="200" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(184,149,58,.2)" letter-spacing="4">COMING SOON</text></svg></div>
+      <div class="bc-body"><span class="bc-tag">Heart Health</span><h3>Legumes, Lentils & Your Heart: What Large-Scale Research Reveals</h3><p>Beans keep appearing in cardiovascular studies. Here's what the data says about these humble foods and long-term heart health.</p><span class="bc-read">Coming Soon</span></div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo"><img src="assets/images/img_003.png" alt="Elefant Café"></div>
+      <div class="ft-tag">Healthily Ever After</div>
+      <p class="ft-desc">100% plant-based takeaway in Milton Keynes.</p>
+    </div>
+    <div class="ft-col"><h4>Navigate</h4><ul>
+      <li><a href="index.html">Home</a></li><li><a href="index.html#menu">Menu</a></li>
+      <li><a href="workshops.html">Workshops</a></li><li><a href="blog.html">Read</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Visit</h4><ul>
+      <li><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Capella House, MK6 1AP</a></li>
+      <li><a href="index.html#hours">Opening Hours</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Connect</h4><ul>
+      <li><a href="https://www.instagram.com/elefant_cafe" target="_blank">@elefant_cafe</a></li>
+      <li><a href="https://wa.me/447768561470" target="_blank">WhatsApp</a></li>
+      <li><a href="mailto:elefantcafeuk@gmail.com">Email Us</a></li>
+    </ul></div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Elefant Café Ltd · Milton Keynes</span>
+    <div class="hygiene"><span>FSA</span><span class="hygiene-n">5</span><span>★</span></div>
+    <div class="socials">
+      <a href="https://www.instagram.com/elefant_cafe" target="_blank" class="soc">IG</a>
+      <a href="https://wa.me/447768561470" target="_blank" class="soc">WA</a>
+      <a href="mailto:elefantcafeuk@gmail.com" class="soc">✉</a>
+    </div>
+  </div>
+</footer>
+<script>
+const cd=document.getElementById('cur-d'),cr=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){cd.style.left=mx+'px';cd.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>cr.classList.add('h'));el.addEventListener('mouseleave',()=>cr.classList.remove('h'));});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>60));
+const fis=document.querySelectorAll('.fi');
+const fObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v');}),{threshold:.08});
+fis.forEach(f=>fObs.observe(f));
+const wa=document.createElement('a');wa.href='https://wa.me/447768561470';wa.target='_blank';
+wa.style.cssText='position:fixed;bottom:24px;right:24px;z-index:300;width:50px;height:50px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;transition:transform .3s;';
+wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+wa.addEventListener('mouseenter',()=>{wa.style.transform='scale(1.1)';cr.classList.add('h');});
+wa.addEventListener('mouseleave',()=>{wa.style.transform='scale(1)';cr.classList.remove('h');});
+document.body.appendChild(wa);
+</script>
+</body>
+</html>

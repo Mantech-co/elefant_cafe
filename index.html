@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elefant Café — Healthily Ever After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#2C5F2E;--sage-mid:#3E7B40;--sage-lt:#6DAB6F;--sage-xs:rgba(44,95,46,.08);
+  --cream:#FAF8F3;--cream2:#F2EDE3;
+  --gold:#B8953A;--gold-lt:#D4B86A;--gold-xs:#E8D49A;
+  --ink:#0e1510;--ink2:#111814;--ink3:#141f14;
+  --white:#FFFFFF;
+  --text-muted:rgba(250,248,243,0.5);--text-dim:rgba(250,248,243,0.35);
+  --border:rgba(255,255,255,0.07);--border-sage:rgba(44,95,46,0.3);
+  --glass:rgba(255,255,255,0.03);
+  --radius:0px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--cream);font-family:'DM Sans',sans-serif;cursor:none;overflow-x:hidden;line-height:1.6;}
+
+/* ─── CURSOR ─── */
+#cur-d{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:opacity .2s;}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid rgba(184,149,58,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s,background .18s;}
+#cur-r.h{width:52px;height:52px;border-color:var(--gold);background:rgba(184,149,58,.06);}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:20px 64px;display:flex;align-items:center;justify-content:space-between;transition:all .4s;}
+nav.s{background:rgba(14,21,16,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:12px 64px;border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;}
+.nav-logo img{height:40px;object-fit:contain;display:block;transition:opacity .3s;}
+.nav-logo img:hover{opacity:.8;}
+.nav-links{display:flex;gap:36px;list-style:none;align-items:center;}
+.nav-links a{font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(250,248,243,.5);text-decoration:none;transition:color .3s;font-weight:500;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);}
+.nav-right{display:flex;gap:12px;align-items:center;}
+.nav-cta{background:var(--gold);color:var(--ink);padding:10px 24px;font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;font-family:'DM Sans';}
+.nav-cta:hover{background:var(--gold-lt);transform:translateY(-1px);box-shadow:0 8px 24px rgba(184,149,58,.28);}
+
+/* ─── HERO — full-width, no side image ─── */
+#hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;padding:0 64px;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(150deg,#061006 0%,#0e1510 40%,#0b180b 100%);}
+
+/* animated grain overlay */
+.hero-grain{position:absolute;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;pointer-events:none;}
+
+/* large decorative circles */
+.hero-ring{position:absolute;border-radius:50%;pointer-events:none;}
+.hr1{width:700px;height:700px;border:1px solid rgba(44,95,46,.09);right:-180px;top:50%;transform:translateY(-50%);}
+.hr2{width:520px;height:520px;border:1px solid rgba(44,95,46,.06);right:-80px;top:50%;transform:translateY(-50%);}
+.hr3{width:340px;height:340px;background:radial-gradient(circle,rgba(44,95,46,.14) 0%,transparent 70%);right:60px;top:50%;transform:translateY(-50%);}
+
+/* orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;}
+.o1{width:600px;height:600px;background:radial-gradient(circle,rgba(44,95,46,.22) 0%,transparent 70%);top:-160px;left:-100px;animation:of 10s ease-in-out infinite;}
+.o2{width:350px;height:350px;background:radial-gradient(circle,rgba(184,149,58,.08) 0%,transparent 70%);bottom:-80px;right:5%;animation:of 10s ease-in-out infinite -6s;}
+@keyframes of{0%,100%{transform:translate(0,0)}40%{transform:translate(28px,-22px)}70%{transform:translate(-18px,26px)}}
+
+/* hero split: text left | visual mosaic right */
+.hero-inner{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding-top:90px;}
+.hero-content{max-width:580px;}
+.hero-tag{display:inline-flex;align-items:center;gap:10px;background:rgba(44,95,46,.13);border:1px solid rgba(44,95,46,.28);padding:7px 16px;margin-bottom:36px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--sage-lt);font-weight:600;}
+.hero-tag span{width:6px;height:6px;background:var(--sage-lt);border-radius:50%;animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(52px,6.5vw,92px);font-weight:900;line-height:.88;letter-spacing:-2.5px;margin-bottom:30px;}
+h1 .line1{display:block;color:var(--cream);}
+h1 .grad{display:block;font-style:italic;font-weight:400;background:linear-gradient(125deg,var(--sage-lt) 0%,#9edd6f 45%,var(--gold-lt) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:15px;line-height:1.9;color:var(--text-muted);max-width:420px;margin-bottom:44px;font-weight:300;}
+.btns{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-g{background:var(--sage);color:var(--white);padding:16px 36px;font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;display:inline-block;font-family:'DM Sans';}
+.btn-g:hover{background:var(--sage-mid);transform:translateY(-2px);box-shadow:0 14px 36px rgba(44,95,46,.32);}
+.btn-o{border:1px solid rgba(250,248,243,.2);color:var(--cream);padding:16px 36px;font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;text-decoration:none;font-weight:400;transition:all .3s;display:inline-block;}
+.btn-o:hover{border-color:rgba(250,248,243,.6);}
+.hero-stats{display:flex;gap:0;margin-top:52px;}
+.hstat{padding:16px 28px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--border);}
+.hstat:first-child{padding-left:0;}
+.hstat:last-child{border-right:none;}
+.hstat-n{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);line-height:1;}
+.hstat-l{font-size:8.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);}
+
+/* hero right — food mosaic */
+.hero-visual{position:relative;height:520px;}
+.hv-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;height:100%;}
+.hv-img{overflow:hidden;position:relative;}
+.hv-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease;}
+.hv-img:hover img{transform:scale(1.06);}
+.hv-img.tall{grid-row:span 2;}
+.hv-label{position:absolute;bottom:10px;left:10px;background:rgba(14,21,16,.8);backdrop-filter:blur(8px);padding:5px 10px;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-lt);font-weight:700;border-left:2px solid var(--gold);}
+.hero-scroll{position:absolute;bottom:36px;left:64px;display:flex;align-items:center;gap:14px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,248,243,.22);}
+.s-line{width:48px;height:1px;background:rgba(250,248,243,.12);overflow:hidden;}
+.s-line::after{content:'';display:block;height:100%;background:var(--gold);animation:sl 2.2s ease-in-out infinite;}
+@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ─── MARQUEE ─── */
+.mq{overflow:hidden;padding:13px 0;background:rgba(44,95,46,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.mq-t{display:flex;gap:52px;width:max-content;animation:mq 34s linear infinite;}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.mq-i{display:flex;align-items:center;gap:14px;white-space:nowrap;font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:rgba(250,248,243,.32);font-weight:600;}
+.mq-d{width:3px;height:3px;background:var(--gold);border-radius:50%;}
+
+/* ─── SECTION COMMON ─── */
+.sec{padding:120px 64px;}
+.sec-sm{padding:80px 64px;}
+.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:700;display:block;margin-bottom:16px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(30px,3.6vw,52px);font-weight:700;line-height:1.05;margin-bottom:22px;}
+.sec-title em{font-style:italic;color:var(--sage-lt);font-weight:400;}
+.sec-title .gold{color:var(--gold-lt);}
+.sec-rule{width:40px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:24px;}
+
+/* ─── PHILOSOPHY / ABOUT ─── */
+#about{background:#0b1709;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;}
+.about-img-block{position:relative;}
+.about-img-frame{position:relative;overflow:hidden;}
+.about-img-frame img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:4/5;filter:brightness(.92) saturate(1.05);}
+/* rich overlay that ties the image to the brand palette */
+.about-img-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,23,8,.75) 100%),linear-gradient(90deg,transparent 70%,rgba(10,23,8,.35) 100%);pointer-events:none;}
+.about-img-caption{position:absolute;bottom:22px;left:22px;right:22px;z-index:2;}
+.about-img-caption blockquote{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(250,248,243,.9);line-height:1.6;}
+.about-corner{position:absolute;bottom:-14px;right:-14px;width:80px;height:80px;border:1px solid rgba(184,149,58,.3);}
+.about-corner2{position:absolute;top:-14px;left:-14px;width:40px;height:40px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);opacity:.5;}
+.about-num{position:absolute;top:20px;right:-20px;width:44px;height:44px;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;z-index:3;}
+.about-text p{font-size:14px;line-height:2.05;color:rgba(250,248,243,.52);margin-bottom:16px;font-weight:300;}
+.blockq{margin-top:32px;padding-left:20px;border-left:2px solid var(--gold);}
+.blockq q{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;line-height:1.7;color:var(--gold-lt);}
+.blockq cite{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-top:9px;}
+
+/* Value strips */
+.vals{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:72px;background:var(--border);}
+.val{background:var(--ink);padding:38px 30px;position:relative;overflow:hidden;transition:background .3s;}
+.val::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--sage),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.val:hover::after{transform:scaleX(1);}
+.val:hover{background:rgba(44,95,46,.07);}
+.val-icon{font-size:24px;margin-bottom:14px;}
+.val h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;margin-bottom:8px;}
+.val p{font-size:12px;line-height:1.85;color:var(--text-muted);font-weight:300;}
+
+/* ─── MENU ─── */
+#menu{background:#090f09;}
+.menu-hdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px;flex-wrap:wrap;gap:20px;}
+.filt{display:flex;gap:2px;flex-wrap:wrap;}
+.fb{padding:9px 18px;font-size:9px;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(250,248,243,.12);background:transparent;color:var(--text-muted);cursor:none;transition:all .25s;font-weight:600;font-family:'DM Sans';}
+.fb.a,.fb:hover{background:var(--sage);color:var(--white);border-color:var(--sage);}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.mc{background:#101810;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;}
+.mc:hover{transform:translateY(-5px);box-shadow:0 20px 52px rgba(0,0,0,.65);z-index:2;}
+.mc-img{width:100%;aspect-ratio:4/3;overflow:hidden;flex-shrink:0;}
+.mc-img img{width:100%;height:100%;object-fit:cover;transition:transform .65s ease;display:block;}
+.mc:hover .mc-img img{transform:scale(1.08);}
+.mc-body{padding:18px 20px;flex:1;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.04);border-top:none;}
+.mc-tag{font-size:7.5px;letter-spacing:2px;text-transform:uppercase;color:var(--sage-lt);margin-bottom:6px;font-weight:700;}
+.mc-name{font-family:'Playfair Display',serif;font-size:15px;font-weight:400;margin-bottom:6px;line-height:1.2;}
+.mc-desc{font-size:11px;line-height:1.75;color:rgba(250,248,243,.4);flex:1;font-weight:300;}
+.mc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.mc-price{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);}
+.mc-add{width:30px;height:30px;background:var(--sage);color:var(--white);border:none;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .25s;}
+.mc-add:hover{background:var(--sage-mid);transform:scale(1.12);}
+.menu-note{margin-top:22px;padding:14px 20px;border-left:2px solid var(--sage);font-size:11px;color:var(--text-muted);line-height:1.8;background:rgba(44,95,46,.05);}
+
+/* ─── REVIEWS — moved immediately after menu ─── */
+#reviews{background:#0b1409;}
+.rev-intro{margin-bottom:52px;}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.rv{padding:36px 30px;border:1px solid var(--border);transition:border-color .3s;position:relative;overflow:hidden;}
+.rv::before{content:'';position:absolute;top:0;left:0;width:30px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.rv:hover::before{transform:scaleX(1);}
+.rv:hover{border-color:rgba(184,149,58,.22);}
+.rv-stars{color:var(--gold);font-size:10px;letter-spacing:3px;margin-bottom:14px;}
+.rv-platform{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.rv-platform .dot{width:3px;height:3px;background:var(--text-dim);border-radius:50%;}
+.rv-text{font-family:'Playfair Display',serif;font-size:15.5px;font-style:italic;line-height:1.75;color:rgba(250,248,243,.82);margin-bottom:18px;font-weight:400;}
+.rv-author{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(250,248,243,.3);}
+
+/* ─── HOURS — renamed & aligned ─── */
+#hours{background:#0d1a0d;}
+.hours-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.hours-table{width:100%;border-collapse:collapse;margin-top:24px;}
+.hours-table tr{border-bottom:1px solid var(--border);}
+.hours-table tr:last-child{border-bottom:none;}
+.hours-table td{padding:14px 0;font-size:13px;}
+.hours-table .day{color:var(--cream);font-weight:500;}
+.hours-table .time{text-align:right;color:var(--text-muted);font-size:12px;line-height:1.65;}
+.hours-table tr.today .day{color:var(--gold);font-weight:700;}
+.hours-table tr.today .time{color:var(--gold-lt);}
+/* right info card — fixed alignment */
+.hours-info{padding:36px 36px;border:1px solid var(--border);background:rgba(255,255,255,.015);align-self:start;}
+.hours-info h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;margin-bottom:26px;color:var(--cream);}
+.info-item{display:grid;grid-template-columns:24px 1fr;gap:14px;margin-bottom:20px;align-items:flex-start;}
+.info-icon{font-size:15px;padding-top:2px;}
+.info-text{font-size:13px;color:var(--text-muted);line-height:1.75;}
+.info-text a{color:var(--gold);text-decoration:none;transition:color .2s;}
+.info-text a:hover{color:var(--gold-lt);}
+.info-text strong{color:var(--cream);display:block;margin-bottom:2px;}
+.open-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(44,95,46,.14);border:1px solid rgba(44,95,46,.32);padding:8px 16px;margin-bottom:26px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--sage-lt);font-weight:700;}
+.open-dot{width:6px;height:6px;background:var(--sage-lt);border-radius:50%;animation:pulse 2.2s ease-in-out infinite;}
+
+/* ─── WORKSHOPS ─── */
+#workshops{background:#111614;}
+.ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:52px;}
+.ws-card{background:#131d12;padding:44px 38px;border:1px solid var(--border);transition:all .35s;position:relative;overflow:hidden;}
+.ws-card::before{content:'';position:absolute;inset:0;background:rgba(44,95,46,.09);opacity:0;transition:opacity .35s;}
+.ws-card:hover::before{opacity:1;}
+.ws-card:hover{border-color:rgba(44,95,46,.38);transform:translateY(-3px);}
+.ws-icon{font-size:28px;margin-bottom:18px;}
+.ws-card h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;margin-bottom:12px;}
+.ws-card p{font-size:13px;line-height:1.85;color:var(--text-muted);margin-bottom:22px;font-weight:300;}
+.ws-card a{display:inline-block;background:var(--sage);color:var(--white);padding:11px 26px;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;position:relative;z-index:1;}
+.ws-card a:hover{background:var(--sage-mid);}
+
+/* ─── OUR STORY — redesigned to fill space ─── */
+#story{background:linear-gradient(160deg,#071207 0%,#0d1a0d 60%,#111614 100%);position:relative;overflow:hidden;}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;position:relative;z-index:2;}
+.story-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;font-family:'Playfair Display',serif;font-size:200px;font-weight:900;font-style:italic;color:rgba(255,255,255,.013);white-space:nowrap;letter-spacing:-8px;user-select:none;}
+.story-left p{font-size:14px;line-height:2.1;color:rgba(250,248,243,.55);margin-bottom:16px;font-weight:300;}
+.story-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;background:var(--border);}
+.sstat{background:var(--ink);padding:28px 24px;}
+.sstat-n{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:var(--gold-lt);line-height:1;margin-bottom:6px;}
+.sstat-l{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
+/* story right — visual collage */
+.story-right{position:relative;}
+.story-img-main{width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;}
+.story-img-main img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85) saturate(1.1);}
+.story-img-main::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(7,18,7,.85) 100%);pointer-events:none;}
+.story-img-badge{position:absolute;bottom:28px;left:28px;right:28px;z-index:2;}
+.story-img-badge p{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--cream);line-height:1.5;}
+.story-img-badge cite{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-lt);margin-top:8px;font-style:normal;}
+.story-corner-br{position:absolute;bottom:-16px;right:-16px;width:80px;height:80px;border:1px solid rgba(184,149,58,.25);}
+.story-corner-tl{position:absolute;top:-16px;left:-16px;width:50px;height:50px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);opacity:.4;}
+
+/* ─── BLOGS TEASER ─── */
+#blog-teaser{background:#111614;}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:0;}
+.blog-card{background:#131d12;overflow:hidden;transition:all .35s;display:flex;flex-direction:column;}
+.blog-card:hover{transform:translateY(-5px);box-shadow:0 20px 52px rgba(0,0,0,.52);}
+.blog-img{width:100%;aspect-ratio:16/9;overflow:hidden;background:#0d1610;flex-shrink:0;}
+.blog-img svg{width:100%;height:100%;display:block;}
+.blog-body{padding:26px 28px;flex:1;display:flex;flex-direction:column;}
+.blog-tag{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--sage-lt);margin-bottom:8px;font-weight:700;}
+.blog-card h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;margin-bottom:10px;line-height:1.3;}
+.blog-card p{font-size:12px;line-height:1.8;color:var(--text-muted);flex:1;font-weight:300;}
+.blog-read{display:inline-block;margin-top:18px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;font-weight:700;transition:color .3s;}
+.blog-read:hover{color:var(--gold-lt);}
+.blog-read::after{content:' →';}
+.blog-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:52px;}
+
+/* ─── ORDER CTA ─── */
+#order{background:#090f09;}
+.order-inner{max-width:900px;margin:0 auto;border:1px solid var(--border);padding:68px;position:relative;}
+.order-inner::before{content:'';position:absolute;top:0;left:0;width:160px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+.order-inner::after{content:'';position:absolute;top:0;left:0;width:1px;height:160px;background:linear-gradient(180deg,var(--gold),transparent);}
+.order-inner .corner-br{position:absolute;bottom:0;right:0;width:160px;height:1px;background:linear-gradient(270deg,var(--gold),transparent);}
+.order-inner .corner-br2{position:absolute;bottom:0;right:0;width:1px;height:160px;background:linear-gradient(0deg,var(--gold),transparent);}
+.order-hdr{text-align:center;margin-bottom:48px;}
+.order-hdr h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;margin-bottom:10px;}
+.order-hdr p{font-size:13px;color:var(--text-muted);}
+.order-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.oo{padding:30px 26px;border:1px solid var(--border);transition:all .35s;position:relative;overflow:hidden;}
+.oo::before{content:'';position:absolute;inset:0;background:rgba(44,95,46,.08);opacity:0;transition:opacity .35s;}
+.oo:hover::before{opacity:1;}
+.oo:hover{border-color:rgba(44,95,46,.35);}
+.oo-icon{font-size:24px;margin-bottom:12px;}
+.oo h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;margin-bottom:8px;}
+.oo p{font-size:12px;line-height:1.8;color:var(--text-muted);margin-bottom:18px;font-weight:300;}
+.oo a{display:inline-block;background:var(--sage);color:var(--white);padding:9px 22px;font-size:9px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:700;transition:all .3s;position:relative;z-index:1;}
+.oo a:hover{background:var(--sage-mid);}
+.order-contact{margin-top:28px;text-align:center;padding-top:22px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);}
+.order-contact a{color:var(--gold);text-decoration:none;}
+
+/* ─── FOOTER ─── */
+footer{background:#060d06;padding:68px 64px 32px;border-top:1px solid var(--border);}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:48px;}
+.ft-logo img{height:36px;margin-bottom:12px;display:block}
+.ft-tag{font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700;}
+.ft-desc{font-size:12px;line-height:1.95;color:rgba(250,248,243,.28);max-width:220px;font-weight:300;}
+.ft-col h4{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:700;}
+.ft-col ul{list-style:none;}
+.ft-col ul li{margin-bottom:9px;}
+.ft-col ul li a{font-size:12px;color:rgba(250,248,243,.35);text-decoration:none;transition:color .3s;}
+.ft-col ul li a:hover{color:var(--cream);}
+.ft-bot{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.ft-copy{font-size:9px;color:rgba(250,248,243,.16);letter-spacing:.5px;}
+.hygiene{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);padding:7px 12px;border:1px solid rgba(184,149,58,.18);}
+.hygiene-n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#9be139;}
+.hygiene span{font-size:9px;color:var(--text-muted);letter-spacing:1px;}
+.socials{display:flex;gap:5px;}
+.soc{width:32px;height:32px;border:1px solid rgba(250,248,243,.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);text-decoration:none;transition:all .3s;}
+.soc:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ─── FADE IN ─── */
+.fi{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;}
+.fi.v{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+
+/* ─── MOBILE ─── */
+@media(max-width:1024px){
+  .about-grid{grid-template-columns:1fr;gap:52px;}
+  .story-grid{grid-template-columns:1fr;gap:52px;}
+  .hero-inner{grid-template-columns:1fr;gap:48px;padding-top:100px;}
+  .hero-visual{height:320px;}
+  .mgrid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  nav,nav.s{padding:14px 24px;}
+  .nav-links{display:none;}
+  #hero{padding:0 24px;}
+  .sec,.sec-sm{padding:72px 24px;}
+  .hours-wrap{grid-template-columns:1fr;gap:44px;}
+  .rev-grid,.blog-grid{grid-template-columns:1fr;}
+  .ws-grid{grid-template-columns:1fr;}
+  .vals{grid-template-columns:1fr;}
+  .ft-grid{grid-template-columns:1fr;gap:32px;}
+  footer{padding:52px 24px 28px;}
+  .order-inner{padding:36px 22px;}
+  .order-opts{grid-template-columns:1fr;}
+  h1{letter-spacing:-1px;}
+  .story-stats{grid-template-columns:1fr 1fr;}
+  .hero-stats{flex-wrap:wrap;}
+}
+@media(max-width:560px){
+  .mgrid{grid-template-columns:1fr;}
+  .hv-grid{grid-template-columns:1fr;}
+  .hv-img.tall{grid-row:span 1;}
+}
+</style>
+</head>
+<body>
+<div id="cur-d"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="assets/images/img_018.png" alt="Elefant Café"></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="index.html#menu">Menu</a></li>
+    <li><a href="workshops.html">Workshops</a></li>
+    <li><a href="index.html#hours">Visit</a></li>
+    <li><a href="blog.html">Read</a></li>
+    <li><a href="index.html#reviews">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://wa.me/447768561470" target="_blank" class="nav-cta">Order Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-ring hr1"></div>
+  <div class="hero-ring hr2"></div>
+  <div class="hero-ring hr3"></div>
+  <div class="orb o1" id="o1"></div>
+  <div class="orb o2" id="o2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag"><span></span>Milton Keynes · 100% Plant-Based Takeaway</div>
+      <h1>
+        <span class="line1">Healthily</span>
+        <span class="grad">Ever After</span>
+      </h1>
+      <p class="hero-sub">Vibrant, wholesome plant-based food in the heart of Milton Keynes. Bold flavours, real ingredients, no shortcuts.</p>
+      <div class="btns">
+        <a href="https://wa.me/447768561470" target="_blank" class="btn-g">Order on WhatsApp</a>
+        <a href="index.html#menu" class="btn-o">Explore the Menu</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n">5★</div><div class="hstat-l">FSA Hygiene Rating</div></div>
+        <div class="hstat"><div class="hstat-n">100%</div><div class="hstat-l">Plant-Based Menu</div></div>
+        <div class="hstat"><div class="hstat-n">£3</div><div class="hstat-l">Starting From</div></div>
+      </div>
+    </div>
+
+    <!-- Food mosaic replacing the old single screenshot image -->
+    <div class="hero-visual fi d1">
+      <div class="hv-grid">
+        <div class="hv-img tall">
+          <img src="assets/images/img_020.jpg" alt="Dosa & Sambhar" loading="lazy">
+          <div class="hv-label">Dosa &amp; Sambhar</div>
+        </div>
+        <div class="hv-img">
+          <img src="assets/images/img_021.jpg" alt="Panini Zucchini" loading="lazy">
+        </div>
+        <div class="hv-img">
+          <img src="assets/images/img_023.jpg" alt="Redness Smoothie" loading="lazy">
+          <div class="hv-label">Redness Smoothie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll"><div class="s-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq"><div class="mq-t" id="mq-t"></div></div>
+
+<!-- PHILOSOPHY / ABOUT -->
+<section class="sec" id="about">
+  <div class="about-grid">
+    <div class="about-img-block fi">
+      <div class="about-img-frame">
+        <!-- Rich food image replacing the abstract SVG -->
+        <img src="assets/images/img_028.jpg" alt="Rainbow Salad — vibrant plant-based food" loading="lazy">
+        <div class="about-img-caption">
+          <blockquote>Every colour on the plate is a vitamin at work.</blockquote>
+        </div>
+      </div>
+      <div class="about-corner"></div>
+      <div class="about-corner2"></div>
+      <div class="about-num">01</div>
+    </div>
+    <div class="fi d2">
+      <span class="eyebrow">Our Philosophy</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Food that loves<br><em>you right back</em></h2>
+      <div class="about-text">
+        <p>At Elefant Café, we believe healthy food should never be boring. Every dish is crafted with wholesome ingredients, bold flavours, and ingredients that genuinely nourish — so you can eat well without compromise.</p>
+        <p>From South Indian Dosa to the Zen Wrap, we draw on the world's finest food traditions to bring something truly memorable to Milton Keynes.</p>
+      </div>
+      <div class="blockq">
+        <q>Good Food. Good Mood. Good For You.</q>
+        <cite>— Elefant Café</cite>
+      </div>
+    </div>
+  </div>
+
+  <div class="vals">
+    <div class="val fi"><div class="val-icon"> 🥗 </div><h3>Easy to Digest</h3><p>Rich in natural fibre and enzymes that support gut health and keep you energised throughout the day.</p></div>
+    <div class="val fi d1"><div class="val-icon">⚡</div><h3>Maximum Nutrients</h3><p>Dense in vitamins, minerals and antioxidants. Real, whole food — no fillers, no ultra-processing.</p></div>
+    <div class="val fi d2"><div class="val-icon">🌐</div><h3>Good for the Planet</h3><p>Every meal you choose from us is part of a more sustainable food system. A small act with big impact.</p></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="sec" id="menu">
+  <div class="menu-hdr fi">
+    <div>
+      <span class="eyebrow">Our Menu</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Eat Well,<br><em>Feel Good</em></h2>
+    </div>
+    <div class="filt">
+      <button class="fb a" data-f="all">All</button>
+      <button class="fb" data-f="mains">Mains</button>
+      <button class="fb" data-f="drinks">Drinks</button>
+      <button class="fb" data-f="salads">Salads</button>
+      <button class="fb" data-f="desserts">Desserts</button>
+    </div>
+  </div>
+  <div class="mgrid">
+    <div class="mc" data-cat="mains">
+      <div class="mc-img"><img src="assets/images/img_020.jpg" alt="Dosa and Sambhar" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Mains · Chef's Pick</span><h3 class="mc-name">Dosa & Sambhar</h3><p class="mc-desc">Naturally fermented rice crepe with protein-rich lentil stew, immunity-boosting spices & coconut chutney.</p><div class="mc-foot"><span class="mc-price">£4.50</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="mains">
+      <div class="mc-img"><img src="assets/images/img_021.jpg" alt="Panini Zucchini" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Mains</span><h3 class="mc-name">Panini Zucchini</h3><p class="mc-desc">Grilled courgettes, olives, aubergines, roasted peppers, spinach & cashew mayo in dairy-free panini bread.</p><div class="mc-foot"><span class="mc-price">£4.50</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="mains">
+      <div class="mc-img"><img src="assets/images/img_022.jpg" alt="Zen Wrap" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Mains</span><h3 class="mc-name">Zen Wrap</h3><p class="mc-desc">Spiced tofu, colourful vegetables, creamy avocado, crunchy slaw & zesty tahini in a wholegrain tortilla.</p><div class="mc-foot"><span class="mc-price">£4.50</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="drinks">
+      <div class="mc-img"><img src="assets/images/img_023.jpg" alt="Redness Smoothie" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Smoothies</span><h3 class="mc-name">Redness Smoothie</h3><p class="mc-desc">Beetroot, cucumber, banana, white grapes, flaxseed, lemon, ginger, cashew & plant cream.</p><div class="mc-foot"><span class="mc-price">£3.00</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="drinks">
+      <div class="mc-img"><img src="assets/images/img_024.jpg" alt="Green Glow Smoothie" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Smoothies</span><h3 class="mc-name">Green Glow Smoothie</h3><p class="mc-desc">Avocado, spinach, crisp green apple and zesty lime. Pure energy in every sip.</p><div class="mc-foot"><span class="mc-price">£3.00</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="salads">
+      <div class="mc-img"><img src="assets/images/img_025.jpg" alt="Rainbow Salad" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Salads</span><h3 class="mc-name">Rainbow Salad</h3><p class="mc-desc">Red cabbage, julienned carrots, radish, coriander, chickpeas, spinach, walnuts & dried cranberries.</p><div class="mc-foot"><span class="mc-price">£3.00</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="desserts">
+      <div class="mc-img"><img src="assets/images/img_026.jpg" alt="Vegan Cake" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Desserts</span><h3 class="mc-name">Vegan Cake Slice</h3><p class="mc-desc">Rotating seasonal handmade cakes. Fully plant-based, dairy-free, and absolutely indulgent.</p><div class="mc-foot"><span class="mc-price">£3.00</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+    <div class="mc" data-cat="desserts">
+      <div class="mc-img"><img src="assets/images/img_027.jpg" alt="Vegan Ice Cream" loading="lazy"></div>
+      <div class="mc-body"><span class="mc-tag">Desserts</span><h3 class="mc-name">Vegan Ice Cream</h3><p class="mc-desc">Creamy dairy-free ice cream in Mango or Salted Caramel, served in branded waffle cones.</p><div class="mc-foot"><span class="mc-price">£3.00</span><button class="mc-add" onclick="addItem(this)">+</button></div></div>
+    </div>
+  </div>
+  <div class="menu-note">🌿 All items are suitable for vegetarians & vegans. Some contain nuts and gluten — please let us know your allergies. &nbsp;·&nbsp; Mango Shake, Watermelon Juice, Berry Smoothie, Crepes & Coffee also available — ask via WhatsApp.</div>
+</section>
+
+<!-- REVIEWS — moved after menu for social proof earlier in journey -->
+<section class="sec" id="reviews">
+  <div class="rev-intro fi">
+    <span class="eyebrow">Real Feedback</span>
+    <div class="sec-rule"></div>
+    <h2 class="sec-title">What our community<br><em>is saying</em></h2>
+  </div>
+  <div class="rev-grid">
+    <div class="rv fi">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>Google</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">Thank you so much for the absolutely delicious and wholesome meal with perfect packaging! The cabbage rotis, mango dessert, uthappam, chutneys and sweet potato curry were simply amazing. It truly felt like a healthy feast.</p>
+      <span class="rv-author">— Dr. Manoj</span>
+    </div>
+    <div class="rv fi d1">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>WhatsApp</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">The most authentic Dosa & Sambhar I've had in Milton Keynes. Every bite brought back the happiest childhood memories.</p>
+      <span class="rv-author">— Manasa</span>
+    </div>
+    <div class="rv fi d2">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>Facebook</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">Fantastic, crunchy, scrumptious Zen Wrap! I kept guessing the various veggies — still fresh and crunchy at dinner. The hint of mayo was so delicious. Very professional packaging too. Keep it coming.</p>
+      <span class="rv-author">— Dr SR</span>
+    </div>
+    <div class="rv fi">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>WhatsApp</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">Thank you for such a delicious meal — so colourful and appetising. The smoothie, Zen Wrap and peanut power bowl were incredible. I will definitely be ordering again. Great healthy takeaway!</p>
+      <span class="rv-author">— MusicGuru</span>
+    </div>
+    <div class="rv fi d1">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>WhatsApp</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">I've had Bombay sandwiches at many places including Mumbai, but never like this. My son and nephew greatly appreciated the taste. The mango shake — I had never tasted anything like it in my life.</p>
+      <span class="rv-author">— Rachel</span>
+    </div>
+    <div class="rv fi d2">
+      <div class="rv-stars">★★★★★</div>
+      <div class="rv-platform"><span>WhatsApp</span><span class="dot"></span><span>Verified Customer</span></div>
+      <p class="rv-text">Incredible, vibrant food. The Zen Wrap and Panini Zucchini are absolutely unforgettable. Found my inner peace with that wrap — so much goodness in one place. Fresh, filling and fantastic!</p>
+      <span class="rv-author">— Manish & Vyom</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS — renamed to "When & Where to Find Us" with fixed card alignment -->
+<section class="sec" id="hours">
+  <div class="hours-wrap">
+    <div class="fi">
+      <span class="eyebrow">When &amp; Where to Find Us</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Opening<br><em>Hours</em></h2>
+      <table class="hours-table">
+        <tr><td class="day">Monday</td><td class="time">10:00 AM – 2:00 PM<br>4:30 PM – 7:00 PM</td></tr>
+        <tr><td class="day">Tuesday</td><td class="time">10:00 AM – 2:00 PM</td></tr>
+        <tr><td class="day">Wednesday</td><td class="time">10:00 AM – 2:00 PM<br>4:30 PM – 7:00 PM</td></tr>
+        <tr><td class="day">Thursday</td><td class="time">10:00 AM – 2:00 PM<br>4:30 PM – 7:00 PM</td></tr>
+        <tr><td class="day">Friday</td><td class="time">10:00 AM – 2:00 PM<br>4:30 PM – 7:00 PM</td></tr>
+        <tr><td class="day">Saturday</td><td class="time">9:00 AM – 7:30 PM</td></tr>
+        <tr><td class="day">Sunday</td><td class="time">10:00 AM – 4:00 PM</td></tr>
+      </table>
+    </div>
+    <div class="hours-info fi d2">
+      <div class="open-badge"><span class="open-dot"></span>Now Open · Takeaway & Collection</div>
+      <h3>Where to Find Us</h3>
+      <div class="info-item">
+        <span class="info-icon">📍</span>
+        <div class="info-text">
+          <strong>Elefant Café Ltd</strong>
+          <a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Capella House, Snowdon Drive<br>Winterhill, Milton Keynes MK6 1AP</a>
+        </div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">📞</span>
+        <div class="info-text"><a href="tel:+447768561470">+44 7768 561470</a></div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">✉️</span>
+        <div class="info-text"><a href="mailto:elefantcafeuk@gmail.com">elefantcafeuk@gmail.com</a></div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">🅿️</span>
+        <div class="info-text">Free parking directly outside the café</div>
+      </div>
+      <div class="info-item">
+        <span class="info-icon">💬</span>
+        <div class="info-text">Pre-order via <a href="https://wa.me/447768561470" target="_blank">WhatsApp</a> for faster collection</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKSHOPS -->
+<section class="sec" id="workshops">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:52px;">
+    <div class="fi">
+      <span class="eyebrow">Workshops & Events</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Cook, Learn,<br><em>Thrive</em></h2>
+    </div>
+    <a href="workshops.html" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;font-weight:700;align-self:flex-end;">All Workshops →</a>
+  </div>
+  <div class="ws-grid">
+    <div class="ws-card fi">
+      <div class="ws-icon">🍽️</div>
+      <h3>Plant-Based Cooking Classes</h3>
+      <p>Hands-on sessions guided by our chefs. Learn to make Dosa, wholesome wraps, smoothie bowls and more from scratch. Suitable for all levels.</p>
+      <a href="https://wa.me/447768561470?text=I'd like to book a cooking workshop" target="_blank">Book via WhatsApp</a>
+    </div>
+    <div class="ws-card fi d1">
+      <div class="ws-icon">🎉</div>
+      <h3>Party & Catering Orders</h3>
+      <p>We take catering orders for all occasions — birthdays, office events, community gatherings. Big or small, plant-based joy for every table.</p>
+      <a href="mailto:elefantcafeuk@gmail.com">Get a Quote</a>
+    </div>
+    <div class="ws-card fi">
+      <div class="ws-icon">🌿</div>
+      <h3>Feel Good Friday Menu</h3>
+      <p>Every Friday we curate a special menu rotating fresh, seasonal plant-based dishes. Indulge your weekend with wholesome goodness from Elefant Café.</p>
+      <a href="https://wa.me/447768561470?text=What's the Feel Good Friday menu?" target="_blank">Ask via WhatsApp</a>
+    </div>
+    <div class="ws-card fi d1">
+      <div class="ws-icon">📚</div>
+      <h3>Nutrition & Wellness Talks</h3>
+      <p>Educational sessions exploring the science behind plant-based eating, gut health, and sustainable nutrition. Ideal for schools, corporates and community groups.</p>
+      <a href="mailto:elefantcafeuk@gmail.com">Enquire Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- OUR STORY — redesigned with two-column layout and real image -->
+<section class="sec" id="story">
+  <div class="story-wm">Elefant</div>
+  <div class="story-grid">
+    <div class="fi">
+      <span class="eyebrow">Our Story</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Rooted in community,<br><em class="gold">grown with purpose</em></h2>
+      <div class="story-left">
+        <p>Elefant Café was born from a simple belief: great food should be accessible, affordable, and genuinely nourishing. We set up in Winterhill, Milton Keynes, to bring vibrant, wholesome takeaway food to our community — without the premium price tag.</p>
+        <p>We carry a 5-star Food Standards Agency hygiene rating and are proud of the community we've built. Every dish is a tribute to the world's greatest culinary traditions — made for everyone to enjoy.</p>
+      </div>
+      <div class="story-stats">
+        <div class="sstat"><div class="sstat-n">5★</div><div class="sstat-l">FSA Hygiene</div></div>
+        <div class="sstat"><div class="sstat-n">100%</div><div class="sstat-l">Plant-Based</div></div>
+        <div class="sstat"><div class="sstat-n">£3</div><div class="sstat-l">Starting From</div></div>
+        <div class="sstat"><div class="sstat-n">MK6</div><div class="sstat-l">Milton Keynes</div></div>
+      </div>
+    </div>
+    <div class="story-right fi d2">
+      <div class="story-img-main">
+        <img src="assets/images/img_022.jpg" alt="Zen Wrap — Elefant Café" loading="lazy">
+        <div class="story-img-badge">
+          <p>"We believe every meal is an opportunity to do good — for yourself and the planet."</p>
+          <cite>— Elefant Café, Milton Keynes</cite>
+        </div>
+      </div>
+      <div class="story-corner-br"></div>
+      <div class="story-corner-tl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG TEASER -->
+<section class="sec" id="blog-teaser">
+  <div class="blog-header fi">
+    <div>
+      <span class="eyebrow">Read &amp; Learn</span>
+      <div class="sec-rule"></div>
+      <h2 class="sec-title">Food, science &<br><em>good living</em></h2>
+    </div>
+    <a href="blog.html" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;font-weight:700;align-self:flex-end;">All Articles →</a>
+  </div>
+  <div class="blog-grid">
+    <a href="blog-plant-based-science.html" style="text-decoration:none;color:inherit;" class="blog-card fi">
+      <div class="blog-img">
+        <svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="225" fill="#0a1409"/>
+          <circle cx="200" cy="112" r="70" fill="none" stroke="rgba(44,95,46,.3)" stroke-width="1"/>
+          <circle cx="200" cy="112" r="45" fill="rgba(44,95,46,.1)"/>
+          <path d="M200 42 L200 182" stroke="rgba(44,95,46,.4)" stroke-width="1"/>
+          <path d="M130 112 L270 112" stroke="rgba(44,95,46,.4)" stroke-width="1"/>
+          <path d="M149 62 L251 162" stroke="rgba(184,149,58,.2)" stroke-width="1"/>
+          <path d="M251 62 L149 162" stroke="rgba(184,149,58,.2)" stroke-width="1"/>
+          <circle cx="200" cy="112" r="6" fill="#B8953A" opacity=".65"/>
+          <text x="200" y="205" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(184,149,58,.25)" letter-spacing="4">SCIENCE</text>
+        </svg>
+      </div>
+      <div class="blog-body">
+        <span class="blog-tag">Science & Nutrition</span>
+        <h3>Plant-Based Eating: What Modern Science Actually Says</h3>
+        <p>Researchers have moved well beyond ideology. Here's what the latest evidence — from gut microbiome studies to cardiovascular research — is revealing about whole-food plant diets.</p>
+        <span class="blog-read">Read Article</span>
+      </div>
+    </a>
+    <div class="blog-card fi d1" style="opacity:.5;pointer-events:none;">
+      <div class="blog-img">
+        <svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="225" fill="#0d1a0d"/>
+          <rect x="100" y="60" width="200" height="105" rx="4" fill="rgba(44,95,46,.1)" stroke="rgba(44,95,46,.2)" stroke-width="1"/>
+          <line x1="120" y1="85" x2="280" y2="85" stroke="rgba(250,248,243,.06)" stroke-width="1"/>
+          <line x1="120" y1="105" x2="260" y2="105" stroke="rgba(250,248,243,.06)" stroke-width="1"/>
+          <line x1="120" y1="125" x2="240" y2="125" stroke="rgba(250,248,243,.06)" stroke-width="1"/>
+          <line x1="120" y1="145" x2="250" y2="145" stroke="rgba(250,248,243,.06)" stroke-width="1"/>
+          <text x="200" y="195" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(184,149,58,.2)" letter-spacing="4">COMING SOON</text>
+        </svg>
+      </div>
+      <div class="blog-body">
+        <span class="blog-tag">Gut Health</span>
+        <h3>The Fibre Revolution: Why Your Gut Bacteria Are More Important Than You Think</h3>
+        <p>Short-chain fatty acids, the microbiome, and why what you feed your gut bacteria may be as important as what you absorb yourself.</p>
+        <span class="blog-read">Coming Soon</span>
+      </div>
+    </div>
+    <div class="blog-card fi d2" style="opacity:.5;pointer-events:none;">
+      <div class="blog-img">
+        <svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="225" fill="#1a0d09"/>
+          <path d="M100 160 C140 100 180 130 200 90 C220 50 260 80 300 70" stroke="rgba(184,149,58,.4)" stroke-width="2" fill="none"/>
+          <circle cx="200" cy="90" r="5" fill="rgba(184,149,58,.5)"/>
+          <circle cx="140" cy="118" r="3" fill="rgba(44,95,46,.6)"/>
+          <circle cx="260" cy="82" r="3" fill="rgba(44,95,46,.6)"/>
+          <text x="200" y="200" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(184,149,58,.2)" letter-spacing="4">COMING SOON</text>
+        </svg>
+      </div>
+      <div class="blog-body">
+        <span class="blog-tag">Heart Health</span>
+        <h3>Legumes, Lentils & Your Heart: What Large-Scale Research Reveals</h3>
+        <p>Beans and lentils keep appearing in cardiovascular research. Here's what the data says and why these humble foods deserve a seat at every table.</p>
+        <span class="blog-read">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER CTA -->
+<section class="sec" id="order">
+  <div class="order-inner fi">
+    <div class="corner-br"></div>
+    <div class="corner-br2"></div>
+    <div class="order-hdr">
+      <span class="eyebrow" style="display:block;margin-bottom:12px;">Ready to Order</span>
+      <h2>Ready for something <em style="font-style:italic;color:var(--gold)">good?</em></h2>
+      <p>Free parking · Fast collection · Capella House, Snowdon Drive, Winterhill MK6 1AP</p>
+    </div>
+    <div class="order-opts">
+      <div class="oo"><div class="oo-icon">💬</div><h3>Order via WhatsApp</h3><p>The fastest way. Message us your order and it'll be ready for quick collection.</p><a href="https://wa.me/447768561470" target="_blank">WhatsApp Now</a></div>
+      <div class="oo"><div class="oo-icon">🎉</div><h3>Party & Catering</h3><p>We take orders for all occasions, big or small. Bring plant-based joy to your event.</p><a href="mailto:elefantcafeuk@gmail.com">Get a Quote</a></div>
+      <div class="oo"><div class="oo-icon">🍽️</div><h3>Book a Workshop</h3><p>Hands-on plant-based cooking workshops. Learn, create, and taste something unforgettable.</p><a href="workshops.html">See Workshops</a></div>
+      <div class="oo"><div class="oo-icon">📍</div><h3>Visit Us</h3><p>Capella House, Snowdon Drive, Winterhill, Milton Keynes MK6 1AP. Free parking outside.</p><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Get Directions</a></div>
+    </div>
+    <div class="order-contact">
+      📞 <a href="tel:+447768561470">+44 7768 561470</a> &nbsp;·&nbsp;
+      ✉️ <a href="mailto:elefantcafeuk@gmail.com">elefantcafeuk@gmail.com</a> &nbsp;·&nbsp;
+      🌐 <a href="https://www.elefantcafe.co.uk" target="_blank">elefantcafe.co.uk</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-logo"><img src="assets/images/img_028.png" alt="Elefant Café"></div>
+      <div class="ft-tag">Healthily Ever After</div>
+      <p class="ft-desc">100% plant-based takeaway in Milton Keynes. Good food, good mood, good for you — and the planet.</p>
+    </div>
+    <div class="ft-col"><h4>Navigate</h4><ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#menu">Menu</a></li>
+      <li><a href="workshops.html">Workshops</a></li>
+      <li><a href="blog.html">Read</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Visit</h4><ul>
+      <li><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Capella House</a></li>
+      <li><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Snowdon Drive, MK6 1AP</a></li>
+      <li><a href="index.html#hours">Opening Hours</a></li>
+      <li><a href="https://maps.google.com/?q=Capella+House+Snowdon+Drive+Winterhill+Milton+Keynes+MK6+1AP" target="_blank">Free Parking</a></li>
+    </ul></div>
+    <div class="ft-col"><h4>Connect</h4><ul>
+      <li><a href="https://www.instagram.com/elefant_cafe" target="_blank">@elefant_cafe</a></li>
+      <li><a href="https://wa.me/447768561470" target="_blank">WhatsApp Order</a></li>
+      <li><a href="tel:+447768561470">+44 7768 561470</a></li>
+      <li><a href="mailto:elefantcafeuk@gmail.com">Email Us</a></li>
+    </ul></div>
+  </div>
+  <div class="ft-bot">
+    <span class="ft-copy">© 2026 Elefant Café Ltd · Milton Keynes · Built with care</span>
+    <div class="hygiene"><span>FSA</span><span class="hygiene-n">5</span><span>★ Very Good</span></div>
+    <div class="socials">
+      <a href="https://www.instagram.com/elefant_cafe" target="_blank" class="soc" title="Instagram">IG</a>
+      <a href="https://wa.me/447768561470" target="_blank" class="soc" title="WhatsApp">WA</a>
+      <a href="mailto:elefantcafeuk@gmail.com" class="soc" title="Email">✉</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cd=document.getElementById('cur-d'),cr=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){cd.style.left=mx+'px';cd.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.mc,.rv,.ws-card,.val,.blog-card,.soc,.oo').forEach(el=>{el.addEventListener('mouseenter',()=>cr.classList.add('h'));el.addEventListener('mouseleave',()=>cr.classList.remove('h'));});
+
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',scrollY>60));
+
+// MARQUEE
+const mItems=['Dosa & Sambhar','Zen Wrap','Panini Zucchini','Rainbow Salad','Redness Smoothie','Green Glow','Vegan Cakes','Feel Good Friday','Party Orders','Milton Keynes','FSA Rating 5★','Healthily Ever After'];
+const mTrack=document.getElementById('mq-t');
+[...mItems,...mItems].forEach(t=>{const d=document.createElement('div');d.className='mq-i';d.innerHTML='<span class="mq-d"></span>'+t;mTrack.appendChild(d);});
+
+// PARALLAX
+const o1=document.getElementById('o1'),o2=document.getElementById('o2');
+window.addEventListener('scroll',()=>{const s=scrollY;if(o1)o1.style.transform=`translate(${s*.03}px,${s*-.06}px)`;if(o2)o2.style.transform=`translate(${s*-.02}px,${s*.04}px)`;});
+
+// FADE IN
+const fis=document.querySelectorAll('.fi');
+const fObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v');}),{threshold:.06});
+fis.forEach(f=>fObs.observe(f));
+
+// FILTER
+document.querySelectorAll('.fb').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('a'));
+  btn.classList.add('a');
+  const f=btn.dataset.f;
+  document.querySelectorAll('.mc').forEach(c=>{c.style.display=(f==='all'||c.dataset.cat===f)?'':'none';});
+}));
+
+// ADD TO ORDER
+function addItem(btn){btn.textContent='✓';btn.style.background='var(--sage-mid)';setTimeout(()=>{btn.textContent='+';btn.style.background='var(--sage)';},1400);}
+
+// HOURS TODAY HIGHLIGHT
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const today=days[new Date().getDay()];
+document.querySelectorAll('.hours-table .day').forEach(td=>{if(td.textContent.trim()===today)td.parentElement.classList.add('today');});
+
+// WHATSAPP FLOAT BUTTON
+const wa=document.createElement('a');
+wa.href='https://wa.me/447768561470';wa.target='_blank';wa.title='Order on WhatsApp';
+wa.style.cssText='position:fixed;bottom:26px;right:26px;z-index:300;width:52px;height:52px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.42);text-decoration:none;transition:transform .3s,box-shadow .3s;';
+wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+wa.addEventListener('mouseenter',()=>{wa.style.transform='scale(1.1)';wa.style.boxShadow='0 6px 26px rgba(37,211,102,.62)';cr.classList.add('h');});
+wa.addEventListener('mouseleave',()=>{wa.style.transform='scale(1)';wa.style.boxShadow='0 4px 18px rgba(37,211,102,.42)';cr.classList.remove('h');});
+document.body.appendChild(wa);
+</script>
+</body>
+</html>
